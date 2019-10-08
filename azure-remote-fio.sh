@@ -1,21 +1,21 @@
 #!/bin/bash
 
-AZ_DISK_ID=fio_test_disk
+AZ_DISK_ID=fio_test_disk_3
 AZ_RESOURCE_GROUP=os4-common
 AZ_SIZE_GB=2048
 AZ_SKU=Premium_LRS
-AZ_VM_NAME=jerzhang-uswest-test
+AZ_VM_NAME=jerzhang-uswest-test-2
 AZ_CACHING=ReadOnly
 
 AZ_SSH_KEY=~/.ssh/libra.pem
-AZ_SSH_ID=core@23.99.86.68
+AZ_SSH_ID=core@40.78.23.38
 
 cleanup() {
     az vm disk detach -g $AZ_RESOURCE_GROUP --vm-name $AZ_VM_NAME --name $AZ_DISK_ID
     az disk delete --name $AZ_DISK_ID --resource-group $AZ_RESOURCE_GROUP --yes
 }
 
-for i in {1..5}
+for i in {1..25}
 do
     echo "This is run number ${i}"
     az vm disk attach \
@@ -42,6 +42,8 @@ fi
 EOF
 
     cleanup
+    echo "Sleeping 15s to allow the disk to be reclaimed"
+    sleep 15s
 done
 
 cleanup
